@@ -30,3 +30,20 @@ app.get("/api/hello", function (req, res) {
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+app.get('/api/:dateUrl', (req,res) => {
+  let dateUrl = req.params.dateUrl;
+  if(/\d{5,}/.test(dateUrl)) {
+    dateUrl = +dateUrl;
+  }
+  let date = new Date(dateUrl);
+  if(date.toUTCString() == "Invalid Date") {
+    res.json({error : date.toUTCString()})
+  }
+  res.json({unix : date.valueOf(), utc : date.toUTCString() });
+});
+
+app.get('/api', (req, res) => {
+  let date = new Date();
+  res.json({unix : date.valueOf(), utc : date.toUTCString() });
+})
